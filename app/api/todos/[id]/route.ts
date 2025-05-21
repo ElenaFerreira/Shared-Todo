@@ -2,7 +2,7 @@ import { connectDB } from "@/lib/mongodb";
 import { Todo } from "@/models/Todo";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+/*export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
   await connectDB();
 
   const deleted = await Todo.findByIdAndDelete(params.id);
@@ -11,7 +11,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
   }
 
   return NextResponse.json({ success: true });
-}
+}*/
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   await connectDB();
