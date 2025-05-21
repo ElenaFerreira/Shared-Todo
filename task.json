@@ -1,0 +1,22 @@
+[
+  {
+    "text": "Apprendre Next.js",
+    "done": false
+  },
+  {
+    "text": "Configurer MongoDB avec Compass",
+    "done": true
+  },
+  {
+    "text": "Créer une API REST avec Next.js",
+    "done": false
+  },
+  {
+    "text": "Styliser l'interface avec Tailwind CSS",
+    "done": false
+  },
+  {
+    "text": "Déployer l'application sur Vercel",
+    "done": false
+  }
+]
