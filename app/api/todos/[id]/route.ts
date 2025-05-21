@@ -2,14 +2,7 @@ import { connectDB } from "@/lib/mongodb";
 import { Todo } from "@/models/Todo";
 import { NextRequest, NextResponse } from "next/server";
 
-// typage strict accepté par Vercel
-type Params = {
-  params: {
-    id: string;
-  };
-};
-
-export async function DELETE(req: NextRequest, context: Params) {
+export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
   await connectDB();
 
   const deleted = await Todo.findByIdAndDelete(context.params.id);
@@ -20,7 +13,7 @@ export async function DELETE(req: NextRequest, context: Params) {
   return NextResponse.json({ success: true });
 }
 
-export async function PATCH(req: NextRequest, context: Params) {
+export async function PATCH(req: NextRequest, context: { params: { id: string } }) {
   await connectDB();
 
   const todo = await Todo.findById(context.params.id);
