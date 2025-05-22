@@ -10,3 +10,13 @@ export async function PATCH(req: Request, context: { params: Promise<{ id: strin
   await todo.save();
   return NextResponse.json(todo);
 }
+
+export async function DELETE(_: Request, { params }: { params: { id: string } }) {
+  try {
+    await connectDB();
+    await Todo.findByIdAndDelete(params.id);
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: String(error) }, { status: 500 });
+  }
+}
