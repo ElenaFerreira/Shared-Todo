@@ -22,7 +22,6 @@ interface CategoryListProps {
   onDeleteCategory: (id: number) => void;
 }
 export const CategoryList = ({ categories, tasks, onToggleTask, onDeleteTask, onDeleteCategory }: CategoryListProps) => {
-  const uncategorizedTasks = tasks.filter((task) => !task.categoryId);
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {categories.map((category) => (

@@ -3,10 +3,9 @@
 import React, { useEffect, useState } from "react";
 import { Header } from "../components/Header";
 import { TaskInput } from "../components/TaskInput";
-import { TaskList } from "../components/TaskList";
 import { CategoryInput } from "../components/CategoryInput";
 import { CategoryList } from "../components/CategoryList";
-import { DndContext, DragEndEvent, closestCenter } from "@dnd-kit/core";
+import { DndContext, closestCenter } from "@dnd-kit/core";
 
 interface Task {
   taskId: number;
