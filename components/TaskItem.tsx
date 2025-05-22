@@ -4,7 +4,7 @@ import { CheckIcon, TrashIcon } from "lucide-react";
 interface Task {
   taskId: number;
   text: string;
-  completed: boolean;
+  done: boolean;
 }
 interface TaskItemProps {
   task: Task;
@@ -17,13 +17,13 @@ export const TaskItem = ({ task, onToggle, onDelete }: TaskItemProps) => {
       <button
         onClick={() => onToggle(task.taskId)}
         className={`flex-shrink-0 w-6 h-6 mr-3 rounded-full border ${
-          task.completed ? "bg-green-500 border-green-500 text-white" : "border-gray-300 text-transparent hover:border-green-500"
+          task.done ? "bg-green-500 border-green-500 text-white" : "border-gray-300 text-transparent hover:border-green-500"
         } flex items-center justify-center cursor-pointer transition-colors duration-200`}
-        aria-label={task.completed ? "Mark as incomplete" : "Mark as complete"}
+        aria-label={task.done ? "Mark as incomplete" : "Mark as complete"}
       >
-        {task.completed && <CheckIcon className="h-4 w-4" />}
+        {task.done && <CheckIcon className="h-4 w-4" />}
       </button>
-      <span className={`flex-grow ${task.completed ? "text-gray-400 line-through" : "text-gray-800"}`}>{task.text}</span>
+      <span className={`flex-grow ${task.done ? "text-gray-400 line-through" : "text-gray-800"}`}>{task.text}</span>
       <button
         onClick={() => onDelete(task.taskId)}
         className="text-gray-400 hover:text-red-500 ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"

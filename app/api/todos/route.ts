@@ -10,11 +10,11 @@ export async function GET() {
 
 export async function POST(req: Request) {
   await connectDB();
-  const { text } = await req.json();
+  const { text, categoryId } = await req.json();
 
   const last = await Todo.findOne().sort({ taskId: -1 });
   const nextId = last ? last.taskId + 1 : 1;
 
-  const newTodo = await Todo.create({ taskId: nextId, text });
+  const newTodo = await Todo.create({ taskId: nextId, text, categoryId });
   return NextResponse.json(newTodo);
 }

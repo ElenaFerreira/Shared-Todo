@@ -4,7 +4,7 @@ import { TaskItem } from "./TaskItem";
 interface Task {
   taskId: number;
   text: string;
-  completed: boolean;
+  done: boolean;
 }
 interface TaskListProps {
   tasks: Task[];
