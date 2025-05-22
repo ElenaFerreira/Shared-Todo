@@ -5,7 +5,7 @@ import { Header } from "../components/Header";
 import { TaskInput } from "../components/TaskInput";
 import { CategoryInput } from "../components/CategoryInput";
 import { CategoryList } from "../components/CategoryList";
-import { DndContext, closestCenter } from "@dnd-kit/core";
+import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core";
 
 interface Task {
   taskId: number;
@@ -23,6 +23,7 @@ interface TodoResponse {
   taskId: number;
   text: string;
   done: boolean;
+  categoryId: number | null;
 }
 
 export default function Home() {
@@ -38,7 +39,7 @@ export default function Home() {
             taskId: t.taskId,
             text: t.text,
             done: t.done,
-            categoryId: 1,
+            categoryId: t.categoryId,
           }))
         )
       );
@@ -60,16 +61,24 @@ export default function Home() {
         taskId: newTask.taskId,
         text: newTask.text,
         done: newTask.done,
-        categoryId: 1,
+        categoryId: newTask.categoryId,
       },
       ...prev,
     ]);
   };
 
   const toggleTask = async (id: number) => {
-    const res = await fetch(`/api/todos/${id}`, { method: "PATCH" });
-    const updated = await res.json();
-    setTasks((prev) => prev.map((task) => (task.taskId === id ? { ...task, done: updated.done } : task)));
+    try {
+      const res = await fetch(`/api/todos/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ toggleDone: true }),
+      });
+      const updated = await res.json();
+      setTasks((prev) => prev.map((task) => (task.taskId === id ? { ...task, done: updated.done } : task)));
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour de la tâche:", error);
+    }
   };
 
   const deleteTask = async (id: number) => {
@@ -99,21 +108,31 @@ export default function Home() {
   };
 
   // DRAG AND DROP
-  /*const handleDragEnd = async (event: DragEndEvent) => {
+  const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over) return;
 
     const taskId = Number(active.id);
-    const categoryId = over.id === "uncategorized" ? null : Number(over.id);
+    const newCategoryId = over.id === "uncategorized" ? null : Number(over.id);
 
-    await fetch(`/api/todos/${taskId}`, {
-      method: "PATCH",
-      body: JSON.stringify({ categoryId }),
-      headers: { "Content-Type": "application/json" },
-    });
+    try {
+      const res = await fetch(`/api/todos/${taskId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ categoryId: newCategoryId }),
+      });
 
-    setTasks((prev) => prev.map((t) => (t.taskId === taskId ? { ...t, categoryId } : t)));
-  };*****/
+      if (!res.ok) {
+        throw new Error("Failed to update task category");
+      }
+
+      const updatedTask = await res.json();
+
+      setTasks((prev) => prev.map((task) => (task.taskId === taskId ? { ...task, categoryId: updatedTask.categoryId } : task)));
+    } catch (error) {
+      console.error("Erreur lors du déplacement de la tâche:", error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -124,13 +143,16 @@ export default function Home() {
             <TaskInput onAddTask={addTask} />
             <CategoryInput onAddCategory={addCategory} />
           </div>
-          <DndContext collisionDetection={closestCenter}>
+          <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             <CategoryList
               categories={categories}
               tasks={tasks}
               onToggleTask={toggleTask}
               onDeleteTask={deleteTask}
               onDeleteCategory={deleteCategory}
+              onMoveTask={(taskId, newCategoryId) => {
+                setTasks((prev) => prev.map((task) => (task.taskId === taskId ? { ...task, categoryId: newCategoryId } : task)));
+              }}
             />
           </DndContext>
         </main>

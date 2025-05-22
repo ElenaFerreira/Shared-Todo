@@ -9,6 +9,7 @@ interface Task {
   done: boolean;
   categoryId: number | null;
 }
+
 interface Category {
   categoryId: number;
   name: string;
@@ -20,8 +21,12 @@ interface CategoryListProps {
   onToggleTask: (id: number) => void;
   onDeleteTask: (id: number) => void;
   onDeleteCategory: (id: number) => void;
+  onMoveTask: (taskId: number, newCategoryId: number | null) => void;
 }
-export const CategoryList = ({ categories, tasks, onToggleTask, onDeleteTask, onDeleteCategory }: CategoryListProps) => {
+
+export const CategoryList = ({ categories, tasks, onToggleTask, onDeleteTask, onDeleteCategory, onMoveTask }: CategoryListProps) => {
+  const uncategorizedTasks = tasks.filter((task) => !task.categoryId);
+
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {categories.map((category) => (
@@ -43,30 +48,35 @@ export const CategoryList = ({ categories, tasks, onToggleTask, onDeleteTask, on
             tasks={tasks.filter((task) => task.categoryId === category.categoryId)}
             onToggleTask={onToggleTask}
             onDeleteTask={onDeleteTask}
+            onMoveTask={onMoveTask}
           />
         </div>
       ))}
     </div>
   );
 };
+
 interface CategoryContainerProps {
   id: string;
   tasks: Task[];
   onToggleTask: (id: number) => void;
   onDeleteTask: (id: number) => void;
+  onMoveTask: (taskId: number, newCategoryId: number | null) => void;
 }
-const CategoryContainer = ({ id, tasks, onToggleTask, onDeleteTask }: CategoryContainerProps) => {
+
+const CategoryContainer = ({ id, tasks, onToggleTask, onDeleteTask, onMoveTask }: CategoryContainerProps) => {
   const { setNodeRef } = useDroppable({
     id,
   });
+
   return (
-    <div ref={setNodeRef} className="min-h-[100px]">
+    <div ref={setNodeRef} className="min-h-[100px] p-2">
       {tasks.length === 0 ? (
         <div className="p-4 text-center text-gray-500 text-sm">Drop tasks here</div>
       ) : (
         <ul className="divide-y divide-gray-100">
-          {tasks.map((task, index) => (
-            <TaskItem key={index} task={task} onToggle={onToggleTask} onDelete={onDeleteTask} />
+          {tasks.map((task) => (
+            <TaskItem key={task.taskId} task={task} onToggle={onToggleTask} onDelete={onDeleteTask} />
           ))}
         </ul>
       )}

@@ -1,17 +1,32 @@
 import React from "react";
 import { CheckIcon, TrashIcon } from "lucide-react";
+import { useDraggable } from "@dnd-kit/core";
 
 interface Task {
   taskId: number;
   text: string;
   done: boolean;
+  categoryId: number | null;
 }
+
 interface TaskItemProps {
   task: Task;
   onToggle: (taskId: number) => void;
   onDelete: (taskId: number) => void;
 }
+
 export const TaskItem = ({ task, onToggle, onDelete }: TaskItemProps) => {
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: task.taskId,
+    data: task,
+  });
+
+  const style = transform
+    ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+      }
+    : undefined;
+
   return (
     <li className="flex items-center p-4 group hover:bg-gray-50 transition-colors duration-150">
       <button
@@ -23,7 +38,9 @@ export const TaskItem = ({ task, onToggle, onDelete }: TaskItemProps) => {
       >
         {task.done && <CheckIcon className="h-4 w-4" />}
       </button>
-      <span className={`flex-grow ${task.done ? "text-gray-400 line-through" : "text-gray-800"}`}>{task.text}</span>
+      <div ref={setNodeRef} style={style} {...listeners} {...attributes} className="flex-grow cursor-move">
+        <span className={`${task.done ? "text-gray-400 line-through" : "text-gray-800"}`}>{task.text}</span>
+      </div>
       <button
         onClick={() => onDelete(task.taskId)}
         className="text-gray-400 hover:text-red-500 ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"

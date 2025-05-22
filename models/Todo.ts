@@ -5,7 +5,7 @@ const TodoSchema = new mongoose.Schema(
     taskId: { type: Number, required: true, unique: true },
     text: { type: String, required: true },
     done: { type: Boolean, default: false },
-    categoryId: { type: String, required: true, default: 1 },
+    categoryId: { type: Number, required: true, default: 1 },
   },
   { timestamps: true }
 );

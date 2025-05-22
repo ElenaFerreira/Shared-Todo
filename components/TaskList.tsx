@@ -5,6 +5,7 @@ interface Task {
   taskId: number;
   text: string;
   done: boolean;
+  categoryId: number;
 }
 interface TaskListProps {
   tasks: Task[];
