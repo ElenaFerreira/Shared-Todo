@@ -11,10 +11,11 @@ export async function PATCH(req: Request, context: { params: Promise<{ id: strin
   return NextResponse.json(todo);
 }
 
-export async function DELETE(_: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_: Request, context: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await context.params;
     await connectDB();
-    await Todo.findByIdAndDelete(params.id);
+    await Todo.findByIdAndDelete(id);
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ success: false, error: String(error) }, { status: 500 });
