@@ -11,15 +11,21 @@ interface Task {
   completed: boolean;
 }
 
+interface TodoResponse {
+  _id: string;
+  text: string;
+  done: boolean;
+}
+
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
     fetch("/api/todos")
       .then((res) => res.json())
-      .then((data) =>
+      .then((data: TodoResponse[]) =>
         setTasks(
-          data.map((t: any) => ({
+          data.map((t) => ({
             id: t._id,
             text: t.text,
             completed: t.done,
