@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const TodoSchema = new mongoose.Schema(
   {
+    taskId: { type: Number, required: true, unique: true },
     text: { type: String, required: true },
     done: { type: Boolean, default: false },
   },

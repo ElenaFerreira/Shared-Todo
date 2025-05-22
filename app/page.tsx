@@ -6,13 +6,13 @@ import { TaskInput } from "../components/TaskInput";
 import { TaskList } from "../components/TaskList";
 
 interface Task {
-  id: string;
+  taskId: number;
   text: string;
   completed: boolean;
 }
 
 interface TodoResponse {
-  _id: string;
+  taskId: number;
   text: string;
   done: boolean;
 }
@@ -26,7 +26,7 @@ export default function Home() {
       .then((data: TodoResponse[]) =>
         setTasks(
           data.map((t) => ({
-            id: t._id,
+            taskId: t.taskId,
             text: t.text,
             completed: t.done,
           }))
@@ -43,7 +43,7 @@ export default function Home() {
     const newTask = await res.json();
     setTasks((prev) => [
       {
-        id: newTask._id,
+        taskId: newTask.taskId,
         text: newTask.text,
         completed: newTask.done,
       },
@@ -51,15 +51,15 @@ export default function Home() {
     ]);
   };
 
-  const toggleTask = async (id: string) => {
+  const toggleTask = async (id: number) => {
     const res = await fetch(`/api/todos/${id}`, { method: "PATCH" });
     const updated = await res.json();
-    setTasks((prev) => prev.map((task) => (task.id === id ? { ...task, completed: updated.done } : task)));
+    setTasks((prev) => prev.map((task) => (task.taskId === id ? { ...task, completed: updated.done } : task)));
   };
 
-  const deleteTask = async (id: string) => {
+  const deleteTask = async (id: number) => {
     await fetch(`/api/todos/${id}`, { method: "DELETE" });
-    setTasks((prev) => prev.filter((task) => task.id !== id));
+    setTasks((prev) => prev.filter((task) => task.taskId !== id));
   };
 
   return (

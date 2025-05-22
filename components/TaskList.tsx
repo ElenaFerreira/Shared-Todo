@@ -2,14 +2,14 @@ import React from "react";
 import { TaskItem } from "./TaskItem";
 
 interface Task {
-  id: string;
+  taskId: number;
   text: string;
   completed: boolean;
 }
 interface TaskListProps {
   tasks: Task[];
-  onToggleTask: (id: string) => void;
-  onDeleteTask: (id: string) => void;
+  onToggleTask: (taskId: number) => void;
+  onDeleteTask: (taskId: number) => void;
 }
 export const TaskList = ({ tasks, onToggleTask, onDeleteTask }: TaskListProps) => {
   if (tasks.length === 0) {
@@ -21,8 +21,8 @@ export const TaskList = ({ tasks, onToggleTask, onDeleteTask }: TaskListProps) =
   }
   return (
     <ul className="divide-y divide-gray-100">
-      {tasks.map((task) => (
-        <TaskItem key={task.id} task={task} onToggle={onToggleTask} onDelete={onDeleteTask} />
+      {tasks.map((task, index) => (
+        <TaskItem key={index} task={task} onToggle={onToggleTask} onDelete={onDeleteTask} />
       ))}
     </ul>
   );
