@@ -25,8 +25,6 @@ interface CategoryListProps {
 }
 
 export const CategoryList = ({ categories, tasks, onToggleTask, onDeleteTask, onDeleteCategory, onMoveTask }: CategoryListProps) => {
-  const uncategorizedTasks = tasks.filter((task) => !task.categoryId);
-
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {categories.map((category) => (
@@ -64,7 +62,7 @@ interface CategoryContainerProps {
   onMoveTask: (taskId: number, newCategoryId: number | null) => void;
 }
 
-const CategoryContainer = ({ id, tasks, onToggleTask, onDeleteTask, onMoveTask }: CategoryContainerProps) => {
+const CategoryContainer = ({ id, tasks, onToggleTask, onDeleteTask }: CategoryContainerProps) => {
   const { setNodeRef } = useDroppable({
     id,
   });
