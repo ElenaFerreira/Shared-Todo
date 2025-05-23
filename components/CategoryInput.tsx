@@ -20,7 +20,7 @@ export const CategoryInput = ({ onAddCategory }: CategoryInputProps) => {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Enter category name..."
-            className="flex-1 p-3 border border-gray-200 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="flex-1 p-3 text-black border border-gray-200 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
           <button
             type="submit"
